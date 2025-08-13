@@ -1,24 +1,18 @@
 class Solution {
-public:
-    long long solve(long long x, long long n, int mod) {
-        if (n == 0) return 1;
-
-        long long half = solve(x, n / 2, mod)%mod; 
-
-        half = (half * half) % mod;  
-        if (n % 2 == 1) half = (half * x)%mod ;
-
-        return half;
+    public:
+    long long mod=1e9+7;
+    long long findPower(long long x,long long a){
+        if(a==0) return 1;
+        long long ans=findPower(x,a/2)%mod;
+        ans= ans*ans%mod;
+        if(a%2!=0) ans= ans*x%mod;
+        return ans;
     }
-
-    int countGoodNumbers(long long n) {
-        int mod = 1e9+7;  
-        long long n1 = n / 2;
-        long long n2 = n - n1;
-
-        long long ans = (solve(4, n1, mod) * solve(5, n2, mod)) % mod;
-        
+public:
+    long long countGoodNumbers(long long n) {
+        long long a=(n+1)/2;
+        long long b=n/2;
+        long long ans= findPower(5,a)*findPower(4,b)%mod;
         return ans;
     }
 };
-
