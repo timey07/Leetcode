@@ -1,9 +1,9 @@
 class Solution {
     public:
-    void solve(double x,long long n, double &ans){
-        if(n==0) return;
-        if(n%2) ans*=x;
-        solve(x*x,n/2,ans);
+    double solve(double x,long long n){
+        if(n==0) return 1;
+        if(n%2) return solve(x*x,n/2)*x;
+        return solve(x*x,n/2);
     }
 public:
     double myPow(double x, long long n) {
@@ -12,7 +12,6 @@ public:
             x=1/x;
         }
         double ans=1.0;
-        solve(x,n,ans);
-        return ans;
+        return solve(x,n);
     }
 };
