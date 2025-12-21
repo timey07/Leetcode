@@ -1,44 +1,43 @@
 class Solution {
 public:
     int orangesRotting(vector<vector<int>>& grid) {
-        int n=grid.size();
-        int m=grid[0].size();
-        int total=0;
+        int m=grid.size();
+        int n=grid[0].size();
         queue<pair<int,int>> q;
-        for(int i=0;i<n;++i){
-            for(int j=0;j<m;++j){
-                if(grid[i][j]) total++;
-                if(grid[i][j]==2) q.push({i,j});
+        int count=0;
+        for(int i=0;i<m;++i){
+            for(int j=0;j<n;++j){
+                if(grid[i][j]==2){
+                    q.push({i,j});
+                }
+                else if(grid[i][j]==1) count++;
             }
         }
-        int ans=0,cnt=0;
+        if(count==0) return 0;
+        if(q.empty()) return -1;
+        int ans=0;
         while(!q.empty()){
             int k=q.size();
-            cnt+=k;
-        while(k--){
-            int r=q.front().first;
-            int c=q.front().second;
-            q.pop();
-            if(c+1<m && grid[r][c+1]==1){
-                grid[r][c+1]=2;
-                q.push({r,c+1});
-            } 
-            if(r+1<n && grid[r+1][c]==1){
-                grid[r+1][c]=2;
-                q.push({r+1,c});
-            } 
-            if(c>0 && grid[r][c-1]==1){
-                grid[r][c-1]=2;
-                q.push({r,c-1});
-            } 
-            if(r>0 && grid[r-1][c]==1){
-                grid[r-1][c]=2;
-                q.push({r-1,c});
-            } 
+            while(k--){
+                int x=q.front().first;
+                int y=q.front().second;
+                q.pop();
+                int dx[]={0,1,0,-1};
+                int dy[]={1,0,-1,0};
+                for(int i=0;i<4;++i){
+                    int a=x+dx[i];
+                    int b=y+dy[i];
+                    if(a>=0 && b>=0 && a<m && b<n && grid[a][b]==1){
+                        count--;
+                        grid[a][b]=2;
+                        q.push({a,b});
+                    }
+                }
+            }
+            if(!q.empty()) ans++;
         }
-        if(!q.empty()) ans++;
-        }
-        if(cnt==total) return ans;
-        else return -1;
+
+        if(count) return -1;
+        else return ans;
     }
 };
