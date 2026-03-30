@@ -1,43 +1,46 @@
 class Solution {
 public:
     int orangesRotting(vector<vector<int>>& grid) {
-        int m=grid.size();
-        int n=grid[0].size();
+        int n=grid.size();
+        int m=grid[0].size();
         queue<pair<int,int>> q;
-        int count=0;
-        for(int i=0;i<m;++i){
-            for(int j=0;j<n;++j){
-                if(grid[i][j]==2){
-                    q.push({i,j});
-                }
-                else if(grid[i][j]==1) count++;
-            }
-        }
-        if(count==0) return 0;
-        if(q.empty()) return -1;
+        vector<int> x={0,1,0,-1};
+        vector<int> y={1,0,-1,0};
+        vector<vector<int>> vis(n,vector<int>(m,0));
         int ans=0;
-        while(!q.empty()){
-            int k=q.size();
-            while(k--){
-                int x=q.front().first;
-                int y=q.front().second;
-                q.pop();
-                int dx[]={0,1,0,-1};
-                int dy[]={1,0,-1,0};
-                for(int i=0;i<4;++i){
-                    int a=x+dx[i];
-                    int b=y+dy[i];
-                    if(a>=0 && b>=0 && a<m && b<n && grid[a][b]==1){
-                        count--;
-                        grid[a][b]=2;
-                        q.push({a,b});
-                    }
-                }
+        for(int i=0;i<n;++i){
+            for(int j=0;j<m;++j){
+                if(grid[i][j]==2)q.push({i,j});
             }
-            if(!q.empty()) ans++;
         }
-
-        if(count) return -1;
-        else return ans;
+                    
+        int count=q.size();
+        while(!q.empty()){
+            while(count--){
+                auto a=q.front();
+                q.pop();
+                for(int i=0;i<4;++i){
+                    int nx=x[i]+a.first;
+                    int ny=y[i]+a.second;
+                    if(nx>=0 && ny>=0 && nx<n && ny<m && grid[nx][ny]==1 && !vis[nx][ny]){
+                        vis[nx][ny]=1;
+                        grid[nx][ny]=2;
+                        q.push({nx,ny});
+                        
+                        }
+                        
+                    }
+                    }
+                    count=q.size();
+                    if(count)ans++;
+                    }
+            
+        
+        for(int i=0;i<n;++i){
+            for(int j=0;j<m;++j){
+                if(grid[i][j]==1) return -1;
+            }
+        }
+        return ans;
     }
 };
