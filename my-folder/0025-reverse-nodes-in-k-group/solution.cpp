@@ -9,51 +9,39 @@
  * };
  */
 class Solution {
-    public:
-void reversell(ListNode* &start) {
-    ListNode* prev=NULL;
-    ListNode* curr=start;
-    ListNode* ne=start->next;
-    while(curr!=NULL){
-        curr->next=prev;
-        prev=curr;
-        curr=ne;
-        if(ne) ne=ne->next;
-    }
-}
-
-
 public:
     ListNode* reverseKGroup(ListNode* head, int k) {
-        if(k==1) return head;
-        ListNode* temp=head;
-        ListNode* kth=head;
-        ListNode* temp3=head;
-        int t=k-1;
-        while(kth!=NULL){
-            t--;
-            kth=kth->next;
-            if(kth==NULL){
-                temp3->next=temp;
-                break;
+        ListNode* tail=head;
+        ListNode* prevtail=new ListNode(-1);
+        ListNode* prev=NULL;
+        ListNode* mover=head;
+        int sz=0;
+        while(mover){
+            sz++;
+            mover=mover->next;
+        }
+        int sum=0;
+        mover=head;
+        while(mover){
+            sum++;
+           if(sum==k) head=mover;
+
+            ListNode* temp=mover->next;
+             
+            if(sum%k==0){
+                prevtail->next=mover;
+                prevtail=tail;
+                tail=temp;
+                
             }
-            if(t==0){
-                t=k-1;
-                ListNode* temp2=kth->next;
-                kth->next=NULL;
-                reversell(temp);
-                if(temp3==head){
-                    head=kth;
-                    temp=temp2;
-                    kth=temp2;
+            mover->next=prev;
+            prev=mover;
+            mover=temp;
+
+            if(sum%k==0 && sz-sum<k){
+                    prevtail->next=temp;
+                    break;
                 }
-                else{
-                    temp3->next=kth;
-                    temp3=temp;
-                    temp=temp2;
-                    kth=temp2;
-                }
-            }
         }
         return head;
     }
