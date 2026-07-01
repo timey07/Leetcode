@@ -1,14 +1,15 @@
 class Solution {
 public:
-    vector<vector<int>> generate(int numRows) {
-        vector<vector<int>> v(numRows,vector<int>());
-        for(int i=1;i<=numRows;++i){
-            v[i-1].resize(i); 
-           v[i-1][0] = v[i-1][i-1] = 1; 
-            for(int j=1;j<=i-2;++j){
-                  v[i-1][j]=(v[i-2][j-1]+v[i-2][j]);
+    vector<vector<int>> generate(int n) {
+        vector<vector<int>> ans(n);
+        for(int i=0;i<n;++i){
+            ans[i].resize(i+1,0);
+            ans[i][0]=1;
+            ans[i][i]=1;
+            for(int j=1;j<i;++j){
+                ans[i][j]=ans[i-1][j]+ans[i-1][j-1];
             }
         }
-        return v;
+        return ans;
     }
 };
