@@ -10,6 +10,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: pip install requests
+
       - name: Sync
         uses: joshcai/leetcode-sync@v1.7
         with:
@@ -19,3 +29,14 @@ jobs:
           destination-folder: my-folder
           verbose: true
           commit-header: "[LeetCode Sync]"
+
+      - name: Organize by Topics
+        run: python scripts/organize.py
+
+      - name: Commit Topic Updates
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Topics
+          git diff --cached --quiet || git commit -m "[Topics] Update"
+          git push
