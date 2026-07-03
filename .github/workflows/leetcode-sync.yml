@@ -8,6 +8,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # Explicitly grant write permissions so the bot can push code
+    permissions:
+      contents: write 
 
     steps:
       - uses: actions/checkout@v4
@@ -32,18 +35,24 @@ jobs:
           verbose: true
           commit-header: "[LeetCode Sync]"
 
+      - name: Pull newly synced files
+        run: |
+          # Pull the commit made by leetcode-sync so organize.py has the latest files
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git pull origin main
+
       - name: Organize by Topics
         run: python scripts/organize.py
 
       - name: Commit Topic Updates
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          git pull --rebase origin main
-
           git add Topics
-          git diff --cached --quiet && exit 0
-
-          git commit -m "[Topics] Update"
-          git push origin main
+          
+          # Safely check if there are changes. If yes, commit and push. If no, skip gracefully.
+          if git diff --cached --quiet; then
+            echo "No topic updates to commit."
+          else
+            git commit -m "[Topics] Update"
+            git push origin main
+          fi
