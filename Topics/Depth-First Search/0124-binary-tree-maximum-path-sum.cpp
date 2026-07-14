@@ -11,16 +11,18 @@
  */
 class Solution {
     private:
-    int solve(TreeNode* Node,int height){
+    int solve(int &ans,TreeNode* Node){
         if(Node==NULL) return 0;
-        int lh=solve(Node->left,height);
-        int rh=solve(Node->right,height);
-        if(abs(lh-rh)>1 || lh==-1 || rh==-1) return -1;
-        return max(lh,rh)+1;
+        int leftsum=max(0,solve(ans,Node->left));
+        int rightsum=max(0,solve(ans,Node->right));
+        ans=max(ans,Node->val+leftsum+rightsum);
+        return Node->val+max(leftsum,rightsum);
     }
 public:
-    bool isBalanced(TreeNode* root) {
-        if(solve(root,0)==-1) return false;
-        return true;
+    int maxPathSum(TreeNode* root) {
+        if(root==NULL) return 0;
+        int ans=root->val;
+        solve(ans,root);
+        return ans;
     }
 };

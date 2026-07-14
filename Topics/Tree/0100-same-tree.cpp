@@ -10,17 +10,13 @@
  * };
  */
 class Solution {
-    private:
-    int solve(TreeNode* Node,int height){
-        if(Node==NULL) return 0;
-        int lh=solve(Node->left,height);
-        int rh=solve(Node->right,height);
-        if(abs(lh-rh)>1 || lh==-1 || rh==-1) return -1;
-        return max(lh,rh)+1;
-    }
 public:
-    bool isBalanced(TreeNode* root) {
-        if(solve(root,0)==-1) return false;
-        return true;
+    bool isSameTree(TreeNode* p, TreeNode* q) {
+        if(p==NULL && q==NULL) return true;
+        if(p==NULL || q==NULL) return false;
+        if(p->val == q->val){
+            return isSameTree(p->left,q->left) && isSameTree(p->right,q->right);
+        }
+        return false;
     }
 };
