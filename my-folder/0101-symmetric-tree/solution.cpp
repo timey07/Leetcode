@@ -10,15 +10,17 @@
  * };
  */
 class Solution {
-public:
-    bool solve(TreeNode* left, TreeNode* right) {
-    if (!left && !right) return true;
-    if (!left || !right) return false;
-    return (left->val == right->val) && solve(left->left, right->right) && solve(left->right, right->left);
-}
+    private:
+    bool solve(TreeNode* left,TreeNode* right){
+        if(!left && !right) return true;
+        if(!left || !right) return false;
+        if(left->val==right->val && solve(left->right,right->left) && solve(left->left,right->right)) return true;
+        return false;
+    }
 
-bool isSymmetric(TreeNode* root) {
-    if (!root) return true;
-    return solve(root->left, root->right);
-}
+public:
+    bool isSymmetric(TreeNode* root) {
+        if(root==NULL) return true;
+        return solve(root->left,root->right);
+    }
 };
