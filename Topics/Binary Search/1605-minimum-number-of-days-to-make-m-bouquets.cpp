@@ -2,30 +2,28 @@ class Solution {
 public:
     int minDays(vector<int>& bloomDay, int m, int k) {
         int n=bloomDay.size();
-          if(  n < (long long ) k * m  )
-        {
-          return -1;
-        }
-        int  low=INT_MAX;
-        int high=INT_MIN;
+        if((long long)m*k > n) return -1;
+        int low=INT_MAX; 
+        int high=INT_MIN; 
         for(int i=0;i<n;++i){
             low=min(low,bloomDay[i]);
             high=max(high,bloomDay[i]);
         }
-        int ans=-1;
+        int ans=high;
         while(low<=high){
             int mid=(low+high)/2;
+            int count=0;
             int sum=0;
-            int temp=0;
             for(int i=0;i<n;++i){
-                if(mid>=bloomDay[i]) temp++;
-                else temp=0;
-                if(temp==k){
+                if(bloomDay[i]<=mid) count++;
+                else count=0;
+                if(count==k){
                     sum++;
-                    temp=0;
+                    count=0;
                 }
+                if(sum==m) break;
             }
-            if(sum>=m){
+            if(sum==m){
                 ans=mid;
                 high=mid-1;
             }

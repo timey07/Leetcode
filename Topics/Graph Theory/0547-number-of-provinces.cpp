@@ -12,11 +12,10 @@ public:
         while(!s.empty()){
             int a=s.top();
             s.pop();
+            vis[a]=1;
             for(int j=0;j<n;++j){
-                if(a==j) continue;
                 if(isConnected[a][j] && !vis[j]){
-                    s.push(j);
-                    vis[j]=1;
+                    s.push(j);       
                 }
             }
         }
